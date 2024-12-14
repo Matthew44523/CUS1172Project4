@@ -58,29 +58,16 @@ router.get('/registrations/event/:eventName', (req, res) => {
     res.json(registrations);
 });
 
-// GET /api/registrations/cancel/:anyfieldregardingticket
-router.get('/registrations/cancel/:identifier', (req, res) => {
-    const identifier = req.params.identifier;
+// GET /api/registrations/cancel/:ticketNumber
+router.get('/registrations/cancel/:ticketNumber', (req, res) => {
+    const ticketNumber = req.params.ticketNumber;
     const registrations = readDatabase();
-
-    // Check if identifier matches a ticket number
-    let updatedRegistrations = registrations.filter(r => r.ticketNumber !== identifier);
-
-    if (registrations.length !== updatedRegistrations.length) {
-        writeDatabase(updatedRegistrations);
-        return res.json({ message: `Ticket with number ${identifier} canceled successfully.` });
+    const updatedRegistrations = registrations.filter(r => r.ticketNumber !== ticketNumber);
+    if (registrations.length === updatedRegistrations.length) {
+        return res.status(404).json({ error: 'Ticket not found.' });
     }
-
-    // Check if identifier matches a name or event name
-    updatedRegistrations = registrations.filter(r => r.name !== identifier && r.eventName !== identifier);
-
-    if (registrations.length !== updatedRegistrations.length) {
-        writeDatabase(updatedRegistrations);
-        return res.json({ message: `Registrations associated with '${identifier}' canceled successfully.` });
-    }
-
-    // If nothing was deleted
-    res.status(404).json({ error: `No ticket, name, or event found for '${identifier}'.` });
+    writeDatabase(updatedRegistrations);
+    res.json({ message: 'Registration canceled successfully.' });
 });
 
 
