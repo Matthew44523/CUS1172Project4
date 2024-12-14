@@ -17,19 +17,32 @@ async function handleButtonClick(action, value) {
         view_all: '/api/registrations',
         by_name: `/api/registrations/byname/${value}`,
         by_event: `/api/registrations/event/${value}`,
-        delete_ticket: `/api/registrations/cancel/${value}`
+        delete_ticket: `/api/registrations/cancel/${value}` // Allow delete by ticket, name, or event
     };
 
     try {
         const response = await fetch(endpointMap[action]);
         const data = await response.json();
-        displayData(data); // This will now work
+
+        if (action === 'delete_ticket') {
+            // Handle delete ticket response
+            const outputDiv = document.getElementById('output');
+            if (data.error) {
+                outputDiv.innerHTML = `<p>Error: ${data.error}</p>`;
+            } else {
+                outputDiv.innerHTML = `<p>${data.message}</p>`;
+            }
+        } else {
+            // Handle other actions
+            displayData(data);
+        }
     } catch (err) {
         console.error('Error fetching data:', err);
         const outputDiv = document.getElementById('output');
         outputDiv.innerHTML = '<p>An error occurred while fetching data.</p>';
     }
 }
+
 
 
 function displayData(data) {
