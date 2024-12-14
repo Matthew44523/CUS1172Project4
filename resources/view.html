@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Registrations</title>
+    <script src="/resources/registration.js" defer></script>
+</head>
+<body>
+    <input type="text" id="searchValue" placeholder="Enter Search Value" />
+    <button onclick="handleButtonClick('view_all')">View All</button>
+    <button onclick="handleButtonClick('by_name', document.getElementById('searchValue').value)">Search by Name</button>
+    <button onclick="handleButtonClick('by_event', document.getElementById('searchValue').value)">Search by Event</button>
+    <button onclick="handleButtonClick('delete_ticket', document.getElementById('searchValue').value)">Delete Ticket</button>
+    <div id="output"></div>
+</body>
+</html>
